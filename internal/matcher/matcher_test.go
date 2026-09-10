@@ -10,8 +10,16 @@ import (
 func TestMatch(t *testing.T) {
 	routes := []mock.Route{
 		{
-			Method: "GET",
-			Path:   "/hello",
+			Name: "test mock",
+			Request: mock.Request{
+				Method: mock.GET,
+				Path:   "/hello",
+			},
+			Response: mock.Response{
+				Status:  200,
+				Headers: nil,
+				Body:    nil,
+			},
 		},
 	}
 
@@ -26,16 +34,24 @@ func TestMatch(t *testing.T) {
 		t.Fatal("Expected the route to match")
 	}
 
-	if route.Path != "/hello" {
-		t.Fatalf("expected /hello, got %s", route.Path)
+	if route.Request.Path != "/hello" {
+		t.Fatalf("expected /hello, got %s", route.Request.Path)
 	}
 }
 
 func TestNoMatch(t *testing.T) {
 	routes := []mock.Route{
 		{
-			Method: "GET",
-			Path:   "/hello",
+			Name: "test mock",
+			Request: mock.Request{
+				Method: "GET",
+				Path:   "/hello",
+			},
+			Response: mock.Response{
+				Status:  200,
+				Headers: nil,
+				Body:    nil,
+			},
 		},
 	}
 
@@ -54,11 +70,18 @@ func TestNoMatch(t *testing.T) {
 func TestMethodMustMatch(t *testing.T) {
 	routes := []mock.Route{
 		{
-			Method: "GET",
-			Path:   "/hello",
+			Name: "test mock",
+			Request: mock.Request{
+				Method: "GET",
+				Path:   "/hello",
+			},
+			Response: mock.Response{
+				Status:  200,
+				Headers: nil,
+				Body:    nil,
+			},
 		},
 	}
-
 	matcher := New(routes)
 	req, err := http.NewRequest(http.MethodPost, "/hello", nil)
 	if err != nil {

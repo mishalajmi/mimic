@@ -1,0 +1,88 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://raw.githubusercontent.com/mishalajmi/mimic/main/schema/mimic-v1.json",
+  "title": "Mimic Mock",
+  "description": "A mimic mock API description",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["name", "routes"],
+  "properties": {
+    "$schema": {
+      "type": "string",
+      "description": "The JSON Schema used to validate this file."
+    },
+    "name": {
+      "type": "string",
+      "description": "Name of the mock.",
+      "minLength": 1
+    },
+    "routes": {
+      "type": "array",
+      "description": "HTTP routes exposed by this mock.",
+      "minItems": 1,
+      "items": {
+        "$ref": "#/$defs/route"
+      }
+    }
+  },
+  "$defs": {
+    "route": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["name", "request", "response"],
+      "properties": {
+        "name": {
+          "type": "string",
+          "description": "Unique name identifying this route.",
+          "minLength": 1
+        },
+        "request": {
+          "$ref": "#/$defs/request"
+        },
+        "response": {
+          "$ref": "#/$defs/response"
+        }
+      }
+    },
+    "request": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["method", "path"],
+      "properties": {
+        "method": {
+          "type": "string",
+          "description": "HTTP method to match.",
+          "enum": ["GET", "POST", "PUT", "PATCH", "DELETE", "HEAD", "OPTIONS"]
+        },
+        "path": {
+          "type": "string",
+          "description": "HTTP path to match.",
+          "pattern": "^/"
+        }
+      }
+    },
+    "response": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["status"],
+      "properties": {
+        "status": {
+          "type": "integer",
+          "description": "HTTP status code returned by Mimic.",
+          "minimum": 100,
+          "maximum": 599
+        },
+        "headers": {
+          "type": "object",
+          "description": "HTTP response headers.",
+          "additionalProperties": {
+            "type": "string"
+          }
+        },
+        "body": {
+          "description": "Response body."
+        }
+      }
+    }
+  }
+}
