@@ -1,0 +1,12 @@
+routes:
+  - method: GET
+    path: /hello
+    response:
+      status: 200
+      body: "Hello, from mimic"
+
+  - method: GET
+    path: /users/123
+    response:
+      status: 200
+      body: '{"id": "123", "name": "mimic}'
