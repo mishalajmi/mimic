@@ -3,10 +3,15 @@ routes:
     path: /hello
     response:
       status: 200
+      headers:
+        Content-Type: text/plain
+        X-Mimic: true
       body: "Hello, from mimic"
 
   - method: GET
     path: /users/123
     response:
       status: 200
+      headers:
+        Content-Type: application/json
       body: '{"id": "123", "name": "mimic}'

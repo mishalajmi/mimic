@@ -36,6 +36,10 @@ func (s *Server) handleFunc(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
+	for k, v := range route.Response.Headers {
+		w.Header().Set(k, v)
+	}
+
 	w.WriteHeader(route.Response.Status)
 	fmt.Fprint(w, route.Response.Body)
 }
