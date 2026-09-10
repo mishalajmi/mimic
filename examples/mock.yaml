@@ -14,4 +14,6 @@ routes:
       status: 200
       headers:
         Content-Type: application/json
-      body: '{"id": "123", "name": "mimic}'
+      body:
+        id: 123
+        name: mimic
