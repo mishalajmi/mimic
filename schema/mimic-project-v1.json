@@ -1,0 +1,30 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://raw.githubusercontent.com/mishalajmi/mimic/main/schema/mimic-project-v1.json",
+  "title": "Mimic Project",
+  "description": "A Mimic project definition.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["name", "definitions"],
+  "properties": {
+    "$schema": {
+      "type": "string",
+      "description": "The JSON Schema used to validate this file."
+    },
+    "name": {
+      "type": "string",
+      "description": "Name of the Mimic project.",
+      "minLength": 1
+    },
+    "definitions": {
+      "type": "array",
+      "description": "Mock definition files included in this project.",
+      "minItems": 1,
+      "items": {
+        "type": "string",
+        "description": "Path to a mock definition file, relative to this project file.",
+        "minLength": 1
+      }
+    }
+  }
+}

@@ -1,0 +1,4 @@
+$schema: https://raw.githubusercontent.com/mishalajmi/mimic/main/sechma/mimic-project-v1.json
+name: example project
+definitions:
+  - mocks/mock.yaml
