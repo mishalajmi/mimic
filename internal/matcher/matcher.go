@@ -20,7 +20,8 @@ func (m *Matcher) Match(r *http.Request) *mock.Route {
 	for i := range m.routes {
 		route := m.routes[i]
 
-		if route.Path == r.URL.Path && string(route.Method) == r.Method {
+		if route.Request.Path == r.URL.Path &&
+			string(route.Request.Method) == r.Method {
 			return &route
 		}
 	}

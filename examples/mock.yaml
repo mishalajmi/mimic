@@ -1,6 +1,9 @@
+$schema: https://raw.githubusercontent.com/mishalajmi/mimic/main/schema/mimic-v1.json
 routes:
-  - method: GET
-    path: /hello
+  - name: Hello Mock
+    request:
+      method: GET
+      path: /hello
     response:
       status: 200
       headers:
@@ -8,8 +11,10 @@ routes:
         X-Mimic: true
       body: "Hello, from mimic"
 
-  - method: GET
-    path: /users/123
+  - name: User 123 Mock
+    request:
+      method: GET
+      path: /users/123
     response:
       status: 200
       headers:

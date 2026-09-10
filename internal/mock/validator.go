@@ -20,15 +20,15 @@ func (d *Definition) Validate() error {
 }
 
 func (r *Route) validate(index int) error {
-	if strings.TrimSpace(string(r.Method)) == "" {
+	if strings.TrimSpace(string(r.Request.Method)) == "" {
 		return fmt.Errorf("route %d: method is not defined", index)
 	}
 
-	if strings.TrimSpace(r.Path) == "" {
+	if strings.TrimSpace(r.Request.Path) == "" {
 		return fmt.Errorf("route %d: path is required", index)
 	}
 
-	if !strings.HasPrefix(r.Path, "/") {
+	if !strings.HasPrefix(r.Request.Path, "/") {
 		return fmt.Errorf("route %d: path must start with a /", index)
 	}
 

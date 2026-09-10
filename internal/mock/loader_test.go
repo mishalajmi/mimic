@@ -13,8 +13,10 @@ func TestLoad(t *testing.T) {
 
 	content := `
 routes:
-  - method: GET
-    path: /hello
+  - name: test mock
+    request:
+      method: GET
+      path: /hello
     response:
       status: 201
       headers:

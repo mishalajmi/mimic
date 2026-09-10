@@ -6,8 +6,11 @@ func TestValidate(t *testing.T) {
 	definition := Definition{
 		Routes: []Route{
 			{
-				Method: "GET",
-				Path:   "/hello",
+				Name: "Test Mock Definition",
+				Request: Request{
+					Method: "GET",
+					Path:   "/hello",
+				},
 				Response: Response{
 					Status: 200,
 					Body:   "Hello",
@@ -33,7 +36,10 @@ func TestValidateRequiresMethod(t *testing.T) {
 	definition := Definition{
 		Routes: []Route{
 			{
-				Path: "/hello",
+				Name: "Test Mock Definition",
+				Request: Request{
+					Path: "/hello",
+				},
 				Response: Response{
 					Status: 200,
 				},
@@ -50,7 +56,10 @@ func TestValidateRequiresPath(t *testing.T) {
 	definition := Definition{
 		Routes: []Route{
 			{
-				Method: "GET",
+				Name: "Test Mock Definition",
+				Request: Request{
+					Method: "GET",
+				},
 				Response: Response{
 					Status: 200,
 				},
@@ -67,8 +76,11 @@ func TestValidatePathMustStartWithSlash(t *testing.T) {
 	definition := Definition{
 		Routes: []Route{
 			{
-				Method: "GET",
-				Path:   "hello",
+				Name: "Test mock definition",
+				Request: Request{
+					Method: "GET",
+					Path:   "hello",
+				},
 				Response: Response{
 					Status: 200,
 				},
@@ -85,8 +97,11 @@ func TestValidateStatus(t *testing.T) {
 	definition := Definition{
 		Routes: []Route{
 			{
-				Method: "GET",
-				Path:   "/hello",
+				Name: "Test mock definition",
+				Request: Request{
+					Method: "GET",
+					Path:   "/hello",
+				},
 				Response: Response{
 					Status: 700,
 				},
