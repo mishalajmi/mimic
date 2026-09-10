@@ -4,18 +4,19 @@ import (
 	"fmt"
 	"net/http"
 
+	"github.com/mishalalajmi/mimic/internal/matcher"
 	"github.com/mishalalajmi/mimic/internal/mock"
 )
 
 type Server struct {
-	addr       string
-	definition *mock.Definition
+	addr    string
+	matcher *matcher.Matcher
 }
 
 func New(addr string, definition *mock.Definition) *Server {
 	return &Server{
 		addr,
-		definition,
+		matcher.New(definition.Routes),
 	}
 }
 
@@ -28,12 +29,13 @@ func (s *Server) Start() error {
 }
 
 func (s *Server) handleFunc(w http.ResponseWriter, r *http.Request) {
-	for _, route := range s.definition.Routes {
-		if string(route.Method) == r.Method && route.Path == r.URL.Path {
-			w.WriteHeader(route.Response.Status)
-			fmt.Fprint(w, route.Response.Body)
-			return
-		}
+	route := s.matcher.Match(r)
+
+	if route == nil {
+		http.NotFound(w, r)
+		return
 	}
-	http.NotFound(w, r)
+
+	w.WriteHeader(route.Response.Status)
+	fmt.Fprint(w, route.Response.Body)
 }
