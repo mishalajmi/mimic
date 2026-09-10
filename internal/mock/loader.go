@@ -18,5 +18,9 @@ func Load(path string) (*Definition, error) {
 		return nil, err
 	}
 
+	if err := definition.Validate(); err != nil {
+		return nil, err
+	}
+
 	return &definition, nil
 }
