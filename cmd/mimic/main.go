@@ -1,10 +1,10 @@
 package main
 
 import (
-	"fmt"
 	"log"
 
 	"github.com/mishalalajmi/mimic/internal/mock"
+	"github.com/mishalalajmi/mimic/internal/server"
 )
 
 func main() {
@@ -13,7 +13,11 @@ func main() {
 		log.Fatal(err)
 	}
 
-	for _, route := range definition.Routes {
-		fmt.Printf("%s %s -> %d\n", route.Method, route.Path, route.Response.Status)
+	srv := server.New(":4000", definition)
+
+	log.Println("mimic listening on http://localhost:4000")
+
+	if err := srv.Start(); err != nil {
+		log.Fatal(err)
 	}
 }
