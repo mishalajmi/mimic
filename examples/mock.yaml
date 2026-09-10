@@ -1,4 +1,5 @@
 $schema: https://raw.githubusercontent.com/mishalajmi/mimic/main/schema/mimic-v1.json
+name: exmaple mock definition
 routes:
   - name: Hello Mock
     request:
@@ -8,7 +9,7 @@ routes:
       status: 200
       headers:
         Content-Type: text/plain
-        X-Mimic: true
+        X-Mimic: "true"
       body: "Hello, from mimic"
 
   - name: User 123 Mock
