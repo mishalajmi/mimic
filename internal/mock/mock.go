@@ -22,6 +22,6 @@ type Route struct {
 
 type Response struct {
 	Status  int               `yaml:"status"`
-	Body    string            `yaml:"body"`
 	Headers map[string]string `yaml:"headers"`
+	Body    any               `yaml:"body"`
 }

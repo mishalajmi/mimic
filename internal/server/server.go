@@ -1,7 +1,6 @@
 package server
 
 import (
-	"fmt"
 	"net/http"
 
 	"github.com/mishalalajmi/mimic/internal/matcher"
@@ -36,10 +35,7 @@ func (s *Server) handleFunc(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	for k, v := range route.Response.Headers {
-		w.Header().Set(k, v)
+	if err := WriteResponse(w, route.Response); err != nil {
+		http.Error(w, "failed to write response", http.StatusInternalServerError)
 	}
-
-	w.WriteHeader(route.Response.Status)
-	fmt.Fprint(w, route.Response.Body)
 }
