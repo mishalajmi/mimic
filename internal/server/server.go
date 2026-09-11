@@ -4,18 +4,20 @@ import (
 	"net/http"
 
 	"github.com/mishalalajmi/mimic/internal/matcher"
-	"github.com/mishalalajmi/mimic/internal/mock"
+	"github.com/mishalalajmi/mimic/internal/project"
 )
 
 type Server struct {
 	addr    string
+	project *project.Project
 	matcher *matcher.Matcher
 }
 
-func New(addr string, definition *mock.Definition) *Server {
+func New(addr string, p *project.Project) *Server {
 	return &Server{
 		addr,
-		matcher.New(definition.Routes),
+		p,
+		matcher.New(p.GetRoutes()),
 	}
 }
 

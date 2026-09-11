@@ -20,7 +20,7 @@ func (d *Definition) Validate() error {
 }
 
 func (r *Route) validate(index int) error {
-	if strings.TrimSpace(string(r.Request.Method)) == "" {
+	if strings.TrimSpace(r.Request.Method) == "" {
 		return fmt.Errorf("route %d: method is not defined", index)
 	}
 

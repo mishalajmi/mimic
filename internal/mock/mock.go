@@ -1,17 +1,5 @@
 package mock
 
-type HTTPMethod string
-
-var (
-	GET     HTTPMethod = "GET"
-	POST    HTTPMethod = "POST"
-	PUT     HTTPMethod = "PUT"
-	PATCH   HTTPMethod = "PATCH"
-	DELETE  HTTPMethod = "DELETE"
-	OPTIONS HTTPMethod = "OPTIONS"
-	HEAD    HTTPMethod = "HEAD"
-)
-
 type Definition struct {
 	Name   string  `yaml:"name"`
 	Routes []Route `yaml:"routes"`
@@ -24,8 +12,8 @@ type Route struct {
 }
 
 type Request struct {
-	Method HTTPMethod `yaml:"method"`
-	Path   string     `yaml:"path"`
+	Method string `yaml:"method"`
+	Path   string `yaml:"path"`
 }
 
 type Response struct {

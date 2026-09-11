@@ -12,7 +12,7 @@ func TestMatch(t *testing.T) {
 		{
 			Name: "test mock",
 			Request: mock.Request{
-				Method: mock.GET,
+				Method: "GET",
 				Path:   "/hello",
 			},
 			Response: mock.Response{

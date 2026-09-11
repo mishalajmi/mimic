@@ -21,7 +21,7 @@ func (m *Matcher) Match(r *http.Request) *mock.Route {
 		route := m.routes[i]
 
 		if route.Request.Path == r.URL.Path &&
-			string(route.Request.Method) == r.Method {
+			route.Request.Method == r.Method {
 			return &route
 		}
 	}

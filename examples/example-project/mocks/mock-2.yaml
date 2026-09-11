@@ -1,0 +1,32 @@
+$schema: https://raw.githubusercontent.com/mishalajmi/mimic/main/schema/mimic-v1.json
+name: exmaple mock 2 definition
+routes:
+  - name: Hello Mock
+    request:
+      method: GET
+      path: /users/123/payments
+    response:
+      status: 200
+      headers:
+        Content-Type: application/json
+        X-Mimic: "true"
+      body:
+        - id: 1234567
+          amount: "73.12"
+        - id: 6789123
+          amount: "100.00"
+  - name: User 123 Mock
+    request:
+      method: GET
+      path: /users/123/orders
+    response:
+      status: 200
+      headers:
+        Content-Type: application/json
+      body:
+        - id: 123
+          name: water
+          payment_id: 1234567
+        - id: 1234
+          name: dinner
+          payment_id: 6789123
