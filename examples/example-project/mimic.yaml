@@ -1,0 +1,5 @@
+$schema: https://raw.githubusercontent.com/mishalajmi/mimic/main/schema/mimic-project-v1.json
+name: exmaple mimic project
+definitions:
+  - mocks/mock.yaml
+  - mocks/mock-2.yaml
