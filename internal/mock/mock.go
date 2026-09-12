@@ -1,5 +1,9 @@
 package mock
 
+import "errors"
+
+var ErrInvalidDefinition = errors.New("invalid definition")
+
 type Definition struct {
 	Name   string  `yaml:"name"`
 	Routes []Route `yaml:"routes"`

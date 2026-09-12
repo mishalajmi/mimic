@@ -1,6 +1,7 @@
 package mock
 
 import (
+	"fmt"
 	"os"
 
 	"gopkg.in/yaml.v3"
@@ -19,7 +20,7 @@ func Load(path string) (*Definition, error) {
 	}
 
 	if err := definition.Validate(); err != nil {
-		return nil, err
+		return nil, fmt.Errorf("%w: %v", ErrInvalidDefinition, err)
 	}
 
 	return &definition, nil

@@ -1,10 +1,16 @@
 package project
 
 import (
+	"errors"
 	"fmt"
 	"strings"
 
 	"github.com/mishalalajmi/mimic/internal/mock"
+)
+
+var (
+	ErrProjectNotFound = errors.New("project not found")
+	ErrInvalidProject  = errors.New("invalid project")
 )
 
 type Project struct {
@@ -15,11 +21,11 @@ type Project struct {
 
 func (p *Project) Validate() error {
 	if len(p.DefinitionFiles) == 0 {
-		return fmt.Errorf("Project file does not contain mock defintions")
+		return fmt.Errorf("no mock definitions are configured")
 	}
 
 	if strings.TrimSpace(p.Name) == "" {
-		return fmt.Errorf("Project file must have a name")
+		return fmt.Errorf("project name is required")
 	}
 
 	return nil

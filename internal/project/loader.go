@@ -19,11 +19,9 @@ func Load(path string) (*Project, error) {
 	for _, f := range project.DefinitionFiles {
 		def, err := mock.Load(filepath.Join(path, f))
 		if err != nil {
-			return nil, fmt.Errorf("loading definition %s: %w", f, err)
+			return nil, fmt.Errorf("loading definition: %s: %v", f, err)
 		}
-		if err := def.Validate(); err != nil {
-			return nil, fmt.Errorf("invalid definition %s: %w", f, err)
-		}
+
 		definitions = append(definitions, *def)
 	}
 	project.Definition = definitions
@@ -52,11 +50,11 @@ func findProject(path string) (*Project, error) {
 			continue // not a valid project file
 		}
 		if err := p.Validate(); err != nil {
-			continue // not a valid project
+			return nil, fmt.Errorf("%w, %v", ErrInvalidProject, err)
 		}
 
 		return &p, nil
 	}
 
-	return nil, fmt.Errorf("no project found in %s", path)
+	return nil, ErrProjectNotFound
 }
