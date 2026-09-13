@@ -41,7 +41,7 @@ func (d *Definition) Validate() error {
 
 	for i, r := range d.Routes {
 		if err := r.Validate(i); err != nil {
-			return fmt.Errorf("route validation failed: %v", err)
+			return err
 		}
 	}
 

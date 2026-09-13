@@ -52,7 +52,7 @@ func Load(path string) (*Project, error) {
 	for _, f := range project.DefinitionFiles {
 		def, err := mock.Load(filepath.Join(path, f))
 		if err != nil {
-			return nil, fmt.Errorf("loading definition: %s: %v", f, err)
+			return nil, fmt.Errorf("%s: %v", f, err)
 		}
 
 		definitions = append(definitions, *def)

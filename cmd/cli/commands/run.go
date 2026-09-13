@@ -42,7 +42,7 @@ func run(cmd *cobra.Command, args []string) error {
 
 	p, err := project.Load(projectPath)
 	if err != nil {
-		return fmt.Errorf("loading project: %w", err)
+		return err
 	}
 
 	addr := fmt.Sprintf(":%d", port)
