@@ -5,21 +5,24 @@ import (
 	"strings"
 )
 
-func (d *Definition) Validate() error {
-	if len(d.Routes) == 0 {
-		return fmt.Errorf("at least one route is required")
-	}
-
-	for i, r := range d.Routes {
-		if err := r.validate(i); err != nil {
-			return fmt.Errorf("route validation failed: %v", err)
-		}
-	}
-
-	return nil
+type Request struct {
+	Method string `yaml:"method"`
+	Path   string `yaml:"path"`
 }
 
-func (r *Route) validate(index int) error {
+type Response struct {
+	Status  int               `yaml:"status"`
+	Headers map[string]string `yaml:"headers"`
+	Body    any               `yaml:"body"`
+}
+
+type Route struct {
+	Name     string   `yaml:"name"`
+	Request  Request  `yaml:"request"`
+	Response Response `yaml:"response"`
+}
+
+func (r *Route) Validate(index int) error {
 	if strings.TrimSpace(r.Request.Method) == "" {
 		return fmt.Errorf("route %d: method is not defined", index)
 	}
