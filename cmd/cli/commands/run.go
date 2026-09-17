@@ -14,10 +14,7 @@ import (
 	"github.com/spf13/cobra"
 )
 
-var (
-	projectPath string
-	port        int
-)
+var port int
 
 var runCommand = &cobra.Command{
 	Use:   "run",
@@ -28,7 +25,6 @@ var runCommand = &cobra.Command{
 func init() {
 	rootCommand.AddCommand(runCommand)
 
-	runCommand.Flags().StringVar(&projectPath, "path", ".", "Path to project and mock definitions")
 	runCommand.Flags().IntVar(&port, "port", 4010, "Port to run the mimic mock server on")
 }
 
@@ -42,6 +38,13 @@ func run(cmd *cobra.Command, args []string) error {
 
 	p, err := project.Load(projectPath)
 	if err != nil {
+		if errors.Is(err, project.ErrProjectNotFound) {
+			return fmt.Errorf(
+				"project not found at %q: use --path to specify the project directory",
+				projectPath,
+			)
+		}
+
 		return err
 	}
 
