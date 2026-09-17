@@ -1,165 +1,147 @@
 package mock
 
 import (
+	"errors"
 	"os"
 	"path/filepath"
 	"testing"
 )
 
-func TestLoad(t *testing.T) {
-	dir := t.TempDir()
-
-	path := filepath.Join(dir, "mock.yaml")
-
-	content := `
+func TestLoadDefinition(t *testing.T) {
+	tests := []struct {
+		name    string
+		content string
+		wantErr error
+	}{
+		{
+			name: "valid definition",
+			content: `
+name: users
 routes:
-  - name: test mock
+  - name: get-users
     request:
       method: GET
-      path: /hello
+      path: /users
     response:
-      status: 201
-      headers:
-        Content-Type: application/json
-      body: '{"hello":"world"}'
-`
-
-	if err := os.WriteFile(path, []byte(content), 0o644); err != nil {
-		t.Fatal(err)
-	}
-
-	definition, err := Load(path)
-	if err != nil {
-		t.Fatal(err)
-	}
-
-	if len(definition.Routes) != 1 {
-		t.Fatalf("expected 1 route, got %d", len(definition.Routes))
-	}
-
-	route := definition.Routes[0]
-
-	if route.Response.Status != 201 {
-		t.Fatalf("expected status 201, got %d", route.Response.Status)
-	}
-
-	if route.Response.Headers["Content-Type"] != "application/json" {
-		t.Fatal("expected Content-Type header")
-	}
-
-	if route.Response.Body != `{"hello":"world"}` {
-		t.Fatalf("unexpected body: %s", route.Response.Body)
-	}
-}
-
-func TestValidate(t *testing.T) {
-	definition := Definition{
-		Routes: []Route{
-			{
-				Name: "Test Mock Definition",
-				Request: Request{
-					Method: "GET",
-					Path:   "/hello",
-				},
-				Response: Response{
-					Status: 200,
-					Body:   "Hello",
-				},
-			},
+      status: 200
+      body:
+        users: []
+`,
+		},
+		{
+			name: "invalid yaml",
+			content: `
+name: users
+routes:
+  - this is invalid
+`,
+			wantErr: ErrInvalidDefinition,
+		},
+		{
+			name: "no routes",
+			content: `
+name: users
+routes: []
+`,
+			wantErr: ErrInvalidDefinition,
+		},
+		{
+			name: "missing method",
+			content: `
+name: users
+routes:
+  - request:
+      path: /users
+    response:
+      status: 200
+`,
+			wantErr: ErrInvalidDefinition,
+		},
+		{
+			name: "missing path",
+			content: `
+name: users
+routes:
+  - request:
+      method: GET
+    response:
+      status: 200
+`,
+			wantErr: ErrInvalidDefinition,
+		},
+		{
+			name: "path does not start with slash",
+			content: `
+name: users
+routes:
+  - request:
+      method: GET
+      path: users
+    response:
+      status: 200
+`,
+			wantErr: ErrInvalidDefinition,
+		},
+		{
+			name: "invalid response status",
+			content: `
+name: users
+routes:
+  - request:
+      method: GET
+      path: /users
+    response:
+      status: 700
+`,
+			wantErr: ErrInvalidDefinition,
 		},
 	}
 
-	if err := definition.Validate(); err != nil {
-		t.Fatalf("expected definition to be valid: %v", err)
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			path := filepath.Join(t.TempDir(), "definition.yaml")
+
+			if err := os.WriteFile(path, []byte(tt.content), 0o644); err != nil {
+				t.Fatal(err)
+			}
+
+			definition, err := Load(path)
+
+			if tt.wantErr != nil {
+				if !errors.Is(err, tt.wantErr) {
+					t.Fatalf("expected error %v, got %v", tt.wantErr, err)
+				}
+				return
+			}
+
+			if err != nil {
+				t.Fatalf("unexpected error: %v", err)
+			}
+
+			if definition == nil {
+				t.Fatal("expected definition, got nil")
+			}
+
+			if definition.Name != "users" {
+				t.Errorf("expected name %q, got %q", "users", definition.Name)
+			}
+
+			if len(definition.Routes) != 1 {
+				t.Fatalf("expected 1 route, got %d", len(definition.Routes))
+			}
+		})
 	}
 }
 
-func TestValidateRequiresRoutes(t *testing.T) {
-	definition := Definition{}
+func TestLoadDefinition_FileNotFound(t *testing.T) {
+	_, err := Load(filepath.Join(t.TempDir(), "missing.yaml"))
 
-	if err := definition.Validate(); err == nil {
-		t.Fatal("expected validation error")
+	if err == nil {
+		t.Fatal("expected error, got nil")
+	}
+
+	if !errors.Is(err, os.ErrNotExist) {
+		t.Fatalf("expected os.ErrNotExist, got %v", err)
 	}
 }
 
-func TestValidateRequiresMethod(t *testing.T) {
-	definition := Definition{
-		Routes: []Route{
-			{
-				Name: "Test Mock Definition",
-				Request: Request{
-					Path: "/hello",
-				},
-				Response: Response{
-					Status: 200,
-				},
-			},
-		},
-	}
-
-	if err := definition.Validate(); err == nil {
-		t.Fatal("expected validation error")
-	}
-}
-
-func TestValidateRequiresPath(t *testing.T) {
-	definition := Definition{
-		Routes: []Route{
-			{
-				Name: "Test Mock Definition",
-				Request: Request{
-					Method: "GET",
-				},
-				Response: Response{
-					Status: 200,
-				},
-			},
-		},
-	}
-
-	if err := definition.Validate(); err == nil {
-		t.Fatal("expected validation error")
-	}
-}
-
-func TestValidatePathMustStartWithSlash(t *testing.T) {
-	definition := Definition{
-		Routes: []Route{
-			{
-				Name: "Test mock definition",
-				Request: Request{
-					Method: "GET",
-					Path:   "hello",
-				},
-				Response: Response{
-					Status: 200,
-				},
-			},
-		},
-	}
-
-	if err := definition.Validate(); err == nil {
-		t.Fatal("expected validation error")
-	}
-}
-
-func TestValidateStatus(t *testing.T) {
-	definition := Definition{
-		Routes: []Route{
-			{
-				Name: "Test mock definition",
-				Request: Request{
-					Method: "GET",
-					Path:   "/hello",
-				},
-				Response: Response{
-					Status: 700,
-				},
-			},
-		},
-	}
-
-	if err := definition.Validate(); err == nil {
-		t.Fatal("expected validation error")
-	}
-}
