@@ -8,7 +8,7 @@ import (
 	"github.com/spf13/cobra"
 )
 
-var validateCommand = &cobra.Command{
+var validateCmd = &cobra.Command{
 	Use:   "validate",
 	Short: "Validate a Mimic project",
 	RunE:  validate,
@@ -28,5 +28,5 @@ func validate(cmd *cobra.Command, args []string) error {
 }
 
 func init() {
-	rootCommand.AddCommand(validateCommand)
+	rootCmd.AddCommand(validateCmd)
 }

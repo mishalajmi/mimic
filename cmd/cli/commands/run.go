@@ -16,16 +16,16 @@ import (
 
 var port int
 
-var runCommand = &cobra.Command{
+var runCmd = &cobra.Command{
 	Use:   "run",
 	Short: "Start the mimic mock server",
 	RunE:  run,
 }
 
 func init() {
-	rootCommand.AddCommand(runCommand)
+	rootCmd.AddCommand(runCmd)
 
-	runCommand.Flags().IntVar(&port, "port", 4010, "Port to run the mimic mock server on")
+	runCmd.Flags().IntVar(&port, "port", 4010, "Port to run the mimic mock server on")
 }
 
 func run(cmd *cobra.Command, args []string) error {

@@ -4,7 +4,7 @@ import "github.com/spf13/cobra"
 
 var projectPath string
 
-var rootCommand = &cobra.Command{
+var rootCmd = &cobra.Command{
 	Use:           "mimic",
 	Short:         "A modern API mocking utility",
 	SilenceUsage:  true,
@@ -12,9 +12,9 @@ var rootCommand = &cobra.Command{
 }
 
 func init() {
-	rootCommand.PersistentFlags().StringVar(&projectPath, "path", ".", "Path to the Mimic project")
+	rootCmd.PersistentFlags().StringVar(&projectPath, "path", ".", "Path to the Mimic project")
 }
 
 func Execute() error {
-	return rootCommand.Execute()
+	return rootCmd.Execute()
 }
